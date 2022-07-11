@@ -7,6 +7,5 @@ import java.util.Optional;
 
 public interface TodoRepository extends JpaRepository<Todo, Integer> {
 
-    Optional<Todo> findByTitle(String title);
 }
 

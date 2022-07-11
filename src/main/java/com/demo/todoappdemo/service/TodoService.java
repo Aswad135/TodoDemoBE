@@ -1,6 +1,8 @@
 package com.demo.todoappdemo.service;
 
 import com.demo.todoappdemo.entity.Todo;
+import com.demo.todoappdemo.entity.TodoList;
+import com.demo.todoappdemo.repository.TodoListRepository;
 import com.demo.todoappdemo.repository.TodoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,8 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -22,11 +24,14 @@ public class TodoService {
 
     Logger logger = LoggerFactory.getLogger(TodoService.class);
     TodoRepository todoRepository;
+    TodoListRepository todoListRepository;
 
     @Autowired
-    public TodoService(TodoRepository todoRepository) {
+    public TodoService(TodoRepository todoRepository, TodoListRepository todoListRepository) {
         this.todoRepository = todoRepository;
+        this.todoListRepository = todoListRepository;
     }
+
 
     public ResponseEntity<Object> saveTodo(Todo todo) {
         try {
@@ -72,17 +77,6 @@ public class TodoService {
         return new ResponseEntity<>("Could not find todo by id: " + id, HttpStatus.BAD_REQUEST);
     }
 
-    public ResponseEntity<Object> getTodoByTitle(String title) {
-        try {
-            Optional<Todo> todo = todoRepository.findByTitle(title);
-            if (todo.isPresent()) {
-                return new ResponseEntity<>(todo.get(), HttpStatus.OK);
-            }
-        } catch (Exception ex) {
-            logger.error(ex.getMessage());
-        }
-        return new ResponseEntity<>("Could not find todo by title: " + title, HttpStatus.BAD_REQUEST);
-    }
 
     public ResponseEntity<Object> getTodos() {
         try {
@@ -108,7 +102,6 @@ public class TodoService {
         try {
             Optional<Todo> existingTodo = todoRepository.findById(todo.getId());
             if (existingTodo.isPresent()) {
-                existingTodo.get().setTitle(todo.getTitle());
                 existingTodo.get().setContents(todo.getContents());
                 existingTodo.get().setCreatedOn(todo.getCreatedOn());
                 existingTodo.get().setModifiedOn(todo.getModifiedOn());
@@ -123,12 +116,14 @@ public class TodoService {
     }
 
     public ResponseEntity<Object> addAndReturnDummyData() {
-        Todo todo = new Todo();
-        todo.setTitle("Title: " + new Random().nextInt());
-        todo.setContents("Contents: " + new Random().nextInt());
-        todo.setCreatedOn(LocalDateTime.now());
-        todo.setModifiedOn(LocalDateTime.now());
-        todo.setDone(false);
-        return saveTodo(todo);
+        TodoList todoList = todoListRepository.findAll().get(0);
+        List<Todo> list = new ArrayList<>();
+        list.add(new Todo(0, "Contents: " + new Random().nextInt(), false, LocalDateTime.now(), LocalDateTime.now(), todoList));
+        list.add(new Todo(0, "Contents: " + new Random().nextInt(), false, LocalDateTime.now(), LocalDateTime.now(), todoList));
+        list.add(new Todo(0, "Contents: " + new Random().nextInt(), false, LocalDateTime.now(), LocalDateTime.now(), todoList));
+        list.add(new Todo(0, "Contents: " + new Random().nextInt(), false, LocalDateTime.now(), LocalDateTime.now(), todoList));
+        list.add(new Todo(0, "Contents: " + new Random().nextInt(), false, LocalDateTime.now(), LocalDateTime.now(), todoList));
+        list.add(new Todo(0, "Contents: " + new Random().nextInt(), false, LocalDateTime.now(), LocalDateTime.now(), todoList));
+        return saveTodo(list);
     }
 }

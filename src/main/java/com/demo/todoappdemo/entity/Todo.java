@@ -13,14 +13,14 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Todo")
 public class Todo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String title;
     private String contents;
     private boolean isDone;
     private LocalDateTime createdOn;
     private LocalDateTime modifiedOn;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private TodoList listHash;
 }

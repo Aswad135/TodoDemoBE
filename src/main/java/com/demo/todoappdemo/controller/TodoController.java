@@ -21,8 +21,14 @@ public interface TodoController {
     @GetMapping("/todo/{id}")
     ResponseEntity<Object> getTodoById(@PathVariable int id);
 
-    @GetMapping("/todo")
-    ResponseEntity<Object> getTodoByTitle(@RequestParam String title);
+    @GetMapping("/todoList")
+    ResponseEntity<Object> getTodoListByTitle(@RequestParam String title);
+
+    @GetMapping("/todoList/{id}")
+    ResponseEntity<Object> getTodoListById(@PathVariable int id);
+
+    @GetMapping("/todoList")
+    ResponseEntity<Object> getTodoListByListHash(@RequestParam String listHash);
 
     @GetMapping("/todo/list")
     ResponseEntity<Object> getTodos();
