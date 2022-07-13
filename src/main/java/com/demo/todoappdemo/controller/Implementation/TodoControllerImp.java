@@ -6,6 +6,7 @@ import com.demo.todoappdemo.entity.TodoList;
 import com.demo.todoappdemo.repository.TodoListRepository;
 import com.demo.todoappdemo.service.TodoListService;
 import com.demo.todoappdemo.service.TodoService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -91,7 +92,11 @@ public class TodoControllerImp implements TodoController {
 
     @Override
     public ResponseEntity<Object> addAndReturnDummyData() {
-        todoListService.addAndReturnDummyData();
-        return todoService.addAndReturnDummyData();
+        try {
+            return todoListService.addAndReturnDummyData();
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }

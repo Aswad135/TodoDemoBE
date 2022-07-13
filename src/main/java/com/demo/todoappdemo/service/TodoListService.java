@@ -1,9 +1,12 @@
 package com.demo.todoappdemo.service;
 
+import com.demo.todoappdemo.dto.TodoDTO;
 import com.demo.todoappdemo.entity.Todo;
 import com.demo.todoappdemo.entity.TodoList;
 import com.demo.todoappdemo.repository.TodoListRepository;
 import com.demo.todoappdemo.repository.TodoRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +27,13 @@ public class TodoListService {
 
     Logger logger = LoggerFactory.getLogger(TodoListService.class);
     TodoListRepository todoListRepository;
+    TodoRepository todoRepository;
 
     @Autowired
-    public TodoListService(TodoListRepository todoListRepository) {
+    public TodoListService(TodoListRepository todoListRepository, TodoRepository todoRepository) {
         this.todoListRepository = todoListRepository;
+        this.todoRepository = todoRepository;
+
     }
 
 
@@ -89,10 +95,24 @@ public class TodoListService {
         return new ResponseEntity<>("Could not find todo List by listHash: " + listHash, HttpStatus.BAD_REQUEST);
     }
 
-    public ResponseEntity<Object> addAndReturnDummyData() {
+    public ResponseEntity<Object> addAndReturnDummyData() throws JsonProcessingException {
         TodoList todoList = new TodoList();
         todoList.setTitle("Title:" + new Random().nextInt());
-        todoList.setListOfTodos(new ArrayList<>());
-        return saveTodoList(todoList);
+        List<Todo> list = new ArrayList<>();
+        list.add(new Todo("Contents: " + new Random().nextInt(), false, LocalDateTime.now(), LocalDateTime.now()));
+        list.add(new Todo("Contents: " + new Random().nextInt(), false, LocalDateTime.now(), LocalDateTime.now()));
+
+        for (Todo t : list
+        ) {
+            todoRepository.saveAndFlush(t);
+        }
+        todoList.getListOfTodos().addAll(list);
+        return new ResponseEntity<>(todoListRepository.saveAndFlush(todoList), HttpStatus.OK);
+//        todoList.getListOfTodos().addAll(todoRepository.saveAll(list));
+
+//        ObjectMapper mapper = new ObjectMapper();
+//        String result = mapper.writeValueAsString(todoList);
+
+//        TodoDTO dto = mapper.readValue(result, TodoDTO.class);
     }
 }

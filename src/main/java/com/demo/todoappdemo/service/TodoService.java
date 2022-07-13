@@ -1,7 +1,6 @@
 package com.demo.todoappdemo.service;
 
 import com.demo.todoappdemo.entity.Todo;
-import com.demo.todoappdemo.entity.TodoList;
 import com.demo.todoappdemo.repository.TodoListRepository;
 import com.demo.todoappdemo.repository.TodoRepository;
 import org.slf4j.Logger;
@@ -12,10 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 
 @Service
@@ -102,12 +99,10 @@ public class TodoService {
         try {
             Optional<Todo> existingTodo = todoRepository.findById(todo.getId());
             if (existingTodo.isPresent()) {
-                existingTodo.get().setContents(todo.getContents());
-                existingTodo.get().setCreatedOn(todo.getCreatedOn());
-                existingTodo.get().setModifiedOn(todo.getModifiedOn());
+                existingTodo.get().setModifiedOn(LocalDateTime.now());
                 existingTodo.get().setDone(todo.isDone());
-                Todo todo1 = todoRepository.save(existingTodo.get());
-                return new ResponseEntity<>(todo1, HttpStatus.OK);
+                todo = todoRepository.save(existingTodo.get());
+                return new ResponseEntity<>(todo, HttpStatus.OK);
             }
         } catch (Exception ex) {
             logger.error(ex.getMessage());
@@ -115,15 +110,4 @@ public class TodoService {
         return new ResponseEntity<>("Could not update the Todo.", HttpStatus.BAD_REQUEST);
     }
 
-    public ResponseEntity<Object> addAndReturnDummyData() {
-        TodoList todoList = todoListRepository.findAll().get(0);
-        List<Todo> list = new ArrayList<>();
-        list.add(new Todo(0, "Contents: " + new Random().nextInt(), false, LocalDateTime.now(), LocalDateTime.now(), todoList));
-        list.add(new Todo(0, "Contents: " + new Random().nextInt(), false, LocalDateTime.now(), LocalDateTime.now(), todoList));
-        list.add(new Todo(0, "Contents: " + new Random().nextInt(), false, LocalDateTime.now(), LocalDateTime.now(), todoList));
-        list.add(new Todo(0, "Contents: " + new Random().nextInt(), false, LocalDateTime.now(), LocalDateTime.now(), todoList));
-        list.add(new Todo(0, "Contents: " + new Random().nextInt(), false, LocalDateTime.now(), LocalDateTime.now(), todoList));
-        list.add(new Todo(0, "Contents: " + new Random().nextInt(), false, LocalDateTime.now(), LocalDateTime.now(), todoList));
-        return saveTodo(list);
-    }
 }

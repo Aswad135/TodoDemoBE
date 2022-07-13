@@ -1,6 +1,7 @@
 package com.demo.todoappdemo.entity;
 
 import lombok.*;
+import org.hibernate.annotations.Target;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -17,19 +18,16 @@ public class TodoList {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private String title;
+    private String title = "";
     @Column(unique = true)
     private String listHash;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Todo> ListOfTodos;
+    @OneToMany(targetEntity = Todo.class, cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @JoinColumn(name = "todo_list_id", referencedColumnName = "id")
+    private List<Todo> ListOfTodos = new ArrayList<>();
 
     @PrePersist
     private void ensureListHash() {
         this.setListHash(UUID.randomUUID().toString());
-        ensureTodoList();
     }
 
-    private void ensureTodoList() {
-        this.setListOfTodos(new ArrayList<>());
-    }
 }

@@ -1,9 +1,6 @@
 package com.demo.todoappdemo.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -13,14 +10,20 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class Todo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String contents;
     private boolean isDone;
-    private LocalDateTime createdOn;
-    private LocalDateTime modifiedOn;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private TodoList listHash;
+    private LocalDateTime createdOn = LocalDateTime.now();
+    private LocalDateTime modifiedOn = LocalDateTime.now();
+
+    public Todo(String contents, boolean isDone, LocalDateTime createdOn, LocalDateTime modifiedOn) {
+        this.contents = contents;
+        this.isDone = isDone;
+        this.createdOn = createdOn;
+        this.modifiedOn = modifiedOn;
+    }
 }
