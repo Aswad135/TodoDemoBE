@@ -42,6 +42,17 @@ public class TodoListService {
         return new ResponseEntity<>("Unable to add todoList.", HttpStatus.BAD_REQUEST);
     }
 
+    public ResponseEntity<Object> getTodoLists() {
+        try {
+            List<TodoList> todoLists = todoListRepository.findAll();
+            return new ResponseEntity<>(todoLists, HttpStatus.OK);
+        } catch (Exception ex) {
+            logger.error(ex.getMessage());
+        }
+        return new ResponseEntity<>("Unable to fetch todoLists: ", HttpStatus.BAD_REQUEST);
+
+    }
+
     public ResponseEntity<Object> getTodoListByTitle(String title) {
         try {
             Optional<TodoList> todo = todoListRepository.findByTitle(title);

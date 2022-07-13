@@ -1,12 +1,12 @@
 package com.demo.todoappdemo.controller;
 
 import com.demo.todoappdemo.entity.Todo;
+import com.demo.todoappdemo.entity.TodoList;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
 public interface TodoController {
 
     @PostMapping("/todo")
@@ -14,6 +14,11 @@ public interface TodoController {
 
     @PostMapping("/todo/list")
     ResponseEntity<Object> saveTodo(@RequestBody List<Todo> todo);
+
+
+    @PostMapping("/todoList/list")
+    ResponseEntity<Object> saveTodoList(@RequestBody TodoList todoList);
+
 
     @GetMapping("/todo/count")
     ResponseEntity<Object> count();
@@ -32,6 +37,9 @@ public interface TodoController {
 
     @GetMapping("/todo/list")
     ResponseEntity<Object> getTodos();
+
+    @GetMapping("/todoList/list")
+    ResponseEntity<Object> getTodoLists();
 
     @DeleteMapping("/todo/delete/{id}")
     ResponseEntity<Object> deleteById(@PathVariable int id);
