@@ -39,9 +39,15 @@ public class TodoListService {
 
     public ResponseEntity<Object> saveTodoList(TodoList todoList) {
         try {
-            todoList = todoListRepository.save(todoList);
-            return new ResponseEntity<>(todoList, HttpStatus.OK);
-
+            Optional<TodoList> todoListOptional = todoListRepository.findById(todoList.getId());
+            if (todoListOptional.isPresent()) {
+                todoListOptional.get().setListOfTodos(todoList.getListOfTodos());
+                todoList = todoListRepository.save(todoListOptional.get());
+                return new ResponseEntity<>(todoList, HttpStatus.OK);
+            } else {
+                todoList = todoListRepository.save(todoList);
+                return new ResponseEntity<>(todoList, HttpStatus.OK);
+            }
         } catch (Exception ex) {
             logger.error(ex.getMessage());
         }

@@ -41,8 +41,8 @@ public interface TodoController {
     @GetMapping("/todoList/list")
     ResponseEntity<Object> getTodoLists();
 
-    @DeleteMapping("/todo/delete/{id}")
-    ResponseEntity<Object> deleteById(@PathVariable int id);
+    @GetMapping("/todo/delete")
+    ResponseEntity<Object> deleteById(@RequestParam int id);
 
     @PutMapping("/todo")
     ResponseEntity<Object> updateTodo(@RequestBody Todo todo);

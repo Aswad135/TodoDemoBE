@@ -81,7 +81,7 @@ public class TodoControllerImp implements TodoController {
     }
 
     @Override
-    public ResponseEntity<Object> deleteById(@PathVariable int id) {
+    public ResponseEntity<Object> deleteById(@RequestParam int id) {
         return todoService.deleteById(id);
     }
 
