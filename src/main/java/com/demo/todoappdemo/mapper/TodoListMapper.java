@@ -11,7 +11,7 @@ import org.mapstruct.factory.Mappers;
 @Mapper
 public abstract class TodoListMapper {
 
-    TodoListMapper INSTANCE = Mappers.getMapper(TodoListMapper.class);
+    public TodoListMapper INSTANCE = Mappers.getMapper(TodoListMapper.class);
 
     public abstract TodoListDTO toDTO(TodoList todo);
 
