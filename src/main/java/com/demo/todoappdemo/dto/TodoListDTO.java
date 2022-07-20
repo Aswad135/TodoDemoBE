@@ -14,5 +14,5 @@ public class TodoListDTO {
     private int id;
     private String title;
     private String listHash;
-    private List<Todo> ListOfTodos = new ArrayList<>();
+    private List<Todo> listOfTodos = new ArrayList<>();
 }

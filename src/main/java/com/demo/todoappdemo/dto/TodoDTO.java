@@ -13,4 +13,5 @@ public class TodoDTO {
     private int id;
     private LocalDateTime createdOn;
     private LocalDateTime modifiedOn;
+    private boolean Done;
 }
