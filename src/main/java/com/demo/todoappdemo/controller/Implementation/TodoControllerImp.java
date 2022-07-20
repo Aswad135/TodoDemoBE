@@ -1,6 +1,8 @@
 package com.demo.todoappdemo.controller.Implementation;
 
 import com.demo.todoappdemo.controller.TodoController;
+import com.demo.todoappdemo.dto.TodoDTO;
+import com.demo.todoappdemo.dto.TodoListDTO;
 import com.demo.todoappdemo.entity.Todo;
 import com.demo.todoappdemo.entity.TodoList;
 import com.demo.todoappdemo.repository.TodoListRepository;
@@ -30,7 +32,7 @@ public class TodoControllerImp implements TodoController {
     }
 
     @Override
-    public ResponseEntity<Object> saveTodo(@RequestBody Todo todo) {
+    public ResponseEntity<Object> saveTodo(@RequestBody TodoDTO todo) {
         return todoService.saveTodo(todo);
     }
 
@@ -40,7 +42,7 @@ public class TodoControllerImp implements TodoController {
     }
 
     @Override
-    public ResponseEntity<Object> saveTodoList(TodoList todoList) {
+    public ResponseEntity<Object> saveTodoList(TodoListDTO todoList) {
         return todoListService.saveTodoList(todoList);
     }
 

@@ -1,8 +1,10 @@
 package com.demo.todoappdemo.service;
 
 import com.demo.todoappdemo.dto.TodoDTO;
+import com.demo.todoappdemo.dto.TodoListDTO;
 import com.demo.todoappdemo.entity.Todo;
 import com.demo.todoappdemo.entity.TodoList;
+import com.demo.todoappdemo.mapper.TodoListMapper;
 import com.demo.todoappdemo.repository.TodoListRepository;
 import com.demo.todoappdemo.repository.TodoRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -37,16 +39,19 @@ public class TodoListService {
     }
 
 
-    public ResponseEntity<Object> saveTodoList(TodoList todoList) {
+    public ResponseEntity<Object> saveTodoList(TodoListDTO todoListDTO) {
         try {
+            TodoList todoList = TodoListMapper.INSTANCE.fromDTO(todoListDTO);
             Optional<TodoList> todoListOptional = todoListRepository.findById(todoList.getId());
             if (todoListOptional.isPresent()) {
                 todoListOptional.get().setListOfTodos(todoList.getListOfTodos());
                 todoList = todoListRepository.save(todoListOptional.get());
-                return new ResponseEntity<>(todoList, HttpStatus.OK);
+                todoListDTO = TodoListMapper.INSTANCE.toDTO(todoList);
+                return new ResponseEntity<>(todoListDTO, HttpStatus.OK);
             } else {
                 todoList = todoListRepository.save(todoList);
-                return new ResponseEntity<>(todoList, HttpStatus.OK);
+                todoListDTO = TodoListMapper.INSTANCE.toDTO(todoList);
+                return new ResponseEntity<>(todoListDTO, HttpStatus.OK);
             }
         } catch (Exception ex) {
             logger.error(ex.getMessage());
@@ -69,7 +74,8 @@ public class TodoListService {
         try {
             Optional<TodoList> todo = todoListRepository.findByTitle(title);
             if (todo.isPresent()) {
-                return new ResponseEntity<>(todo.get(), HttpStatus.OK);
+                TodoListDTO dto = TodoListMapper.INSTANCE.toDTO(todo.get());
+                return new ResponseEntity<>(dto, HttpStatus.OK);
             }
         } catch (Exception ex) {
             logger.error(ex.getMessage());
@@ -81,7 +87,8 @@ public class TodoListService {
         try {
             Optional<TodoList> todo = todoListRepository.findById(id);
             if (todo.isPresent()) {
-                return new ResponseEntity<>(todo.get(), HttpStatus.OK);
+                TodoListDTO dto = TodoListMapper.INSTANCE.toDTO(todo.get());
+                return new ResponseEntity<>(dto, HttpStatus.OK);
             }
         } catch (Exception ex) {
             logger.error(ex.getMessage());
@@ -93,7 +100,8 @@ public class TodoListService {
         try {
             Optional<TodoList> todo = todoListRepository.findByListHash(listHash);
             if (todo.isPresent()) {
-                return new ResponseEntity<>(todo.get(), HttpStatus.OK);
+                TodoListDTO dto = TodoListMapper.INSTANCE.toDTO(todo.get());
+                return new ResponseEntity<>(dto, HttpStatus.OK);
             }
         } catch (Exception ex) {
             logger.error(ex.getMessage());
@@ -114,11 +122,6 @@ public class TodoListService {
         }
         todoList.getListOfTodos().addAll(list);
         return new ResponseEntity<>(todoListRepository.saveAndFlush(todoList), HttpStatus.OK);
-//        todoList.getListOfTodos().addAll(todoRepository.saveAll(list));
 
-//        ObjectMapper mapper = new ObjectMapper();
-//        String result = mapper.writeValueAsString(todoList);
-
-//        TodoDTO dto = mapper.readValue(result, TodoDTO.class);
     }
 }

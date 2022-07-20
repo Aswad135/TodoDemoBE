@@ -9,7 +9,7 @@ import org.mapstruct.factory.Mappers;
 @Mapper
 public abstract class TodoMapper {
 
-    TodoMapper INSTANCE = Mappers.getMapper(TodoMapper.class);
+    public static TodoMapper INSTANCE = Mappers.getMapper(TodoMapper.class);
 
     public abstract TodoDTO toDTO(Todo todo);
 

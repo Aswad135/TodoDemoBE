@@ -1,6 +1,8 @@
 package com.demo.todoappdemo.service;
 
+import com.demo.todoappdemo.dto.TodoDTO;
 import com.demo.todoappdemo.entity.Todo;
+import com.demo.todoappdemo.mapper.TodoMapper;
 import com.demo.todoappdemo.repository.TodoListRepository;
 import com.demo.todoappdemo.repository.TodoRepository;
 import org.slf4j.Logger;
@@ -30,10 +32,12 @@ public class TodoService {
     }
 
 
-    public ResponseEntity<Object> saveTodo(Todo todo) {
+    public ResponseEntity<Object> saveTodo(TodoDTO todoDTO) {
         try {
+            Todo todo = TodoMapper.INSTANCE.fromDTO(todoDTO);
             todo = todoRepository.save(todo);
-            return new ResponseEntity<>(todo, HttpStatus.OK);
+            todoDTO = TodoMapper.INSTANCE.toDTO(todo);
+            return new ResponseEntity<>(todoDTO, HttpStatus.OK);
 
         } catch (Exception ex) {
             logger.error(ex.getMessage());

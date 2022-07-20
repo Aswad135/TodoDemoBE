@@ -1,5 +1,7 @@
 package com.demo.todoappdemo.controller;
 
+import com.demo.todoappdemo.dto.TodoDTO;
+import com.demo.todoappdemo.dto.TodoListDTO;
 import com.demo.todoappdemo.entity.Todo;
 import com.demo.todoappdemo.entity.TodoList;
 import org.springframework.http.ResponseEntity;
@@ -10,14 +12,14 @@ import java.util.List;
 public interface TodoController {
 
     @PostMapping("/todo")
-    ResponseEntity<Object> saveTodo(@RequestBody Todo todo);
+    ResponseEntity<Object> saveTodo(@RequestBody TodoDTO todo);
 
     @PostMapping("/todo/list")
     ResponseEntity<Object> saveTodo(@RequestBody List<Todo> todo);
 
 
     @PostMapping("/todoList/list")
-    ResponseEntity<Object> saveTodoList(@RequestBody TodoList todoList);
+    ResponseEntity<Object> saveTodoList(@RequestBody TodoListDTO todoList);
 
 
     @GetMapping("/todo/count")
